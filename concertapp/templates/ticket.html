@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Tickets</title>
+</head>
+<body>
+    <h2>Book tickets here</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label for="concertname">Concert Name :</label>
+        <select name="concertname" id="concertname">
+            {% for concert in concerts %}
+            <option value="{{concert.concertname}}">{{concert.concertname}}</option>
+            {% endfor %}
+        </select><br><br>
+        <label>Tickets Needed :</label>
+        <input type="number" name="ticketsneeded" value="ticketsneeded"><br><br>
+        {% if errors %}
+        {{error}}
+        {% endif %}
+        <br><br><button type="submit">Book</button>
+    </form>
+</body>
+</html>
