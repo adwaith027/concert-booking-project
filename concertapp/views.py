@@ -50,7 +50,7 @@ def bookconcert(request):
         ticketcount=int(ticketcount)
         username=request.user.username
         useremail=request.user.email
-        if ticketcount<=3 and ticketcount<=3:
+        if ticketcount<=3 and ticketcount>0:
             concert=request.POST.get('concertname')
             price=concertmodel.objects.filter(concertname=concert).values_list('ticketprice',flat=True)
             price=price[0]
