@@ -12,7 +12,7 @@
         <label for="concertname">Concert Name :</label>
         <select name="concertname" id="concertname">
             {% for concert in concerts %}
-            <option value="{{concert.concertname}}">{{concert.concertname}}</option>
+            <option value="{{concert.concertname}}">{{concert.concertname}} {{concert.concertdate}}</option>
             {% endfor %}
         </select><br><br>
         <label>Tickets Needed :</label>

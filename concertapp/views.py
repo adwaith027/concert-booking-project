@@ -44,9 +44,10 @@ def createconcert(request):
 
 @login_required(login_url='login')
 def bookconcert(request):
-    concert=concertmodel.objects.all()
     if request.method=='POST':
         ticketcount=request.POST.get('ticketsneeded')
+        if ticketcount=='':
+            return HttpResponse('book atleast one ticket')
         ticketcount=int(ticketcount)
         username=request.user.username
         useremail=request.user.email
@@ -57,13 +58,19 @@ def bookconcert(request):
             total=price*ticketcount
             ticketdata=ticketbooking(concertname=concert,ticketprice=price,username=username,useremail=useremail,bookedtickets=ticketcount,totalprice=total)
             ticketdata.save()
-            concertmodel.objects
+            availabletickets=concertmodel.objects.filter(concertname=concert).values_list('availabletickets',flat=True)
+            availabletickets=availabletickets[0]
+            availabletickets=availabletickets-ticketcount
+            ticketavail=concertmodel.objects.get(concertname=concert)
+            ticketavail.availabletickets=availabletickets
+            ticketavail.save()
             return redirect('logout')
+        elif ticketcount<=0:
+            return HttpResponse('book atleast one ticket')
         else:
             return HttpResponse('no more than 3 tickets per user')
-            # return render(request,'ticket.html',{'error':'One user can book only upto 3 tickets','concerts':concert})
-    return render(request,'ticket.html',{'concerts':concert})
-
+    concerts=concertmodel.objects.all()
+    return render(request,'ticket.html',{'concerts':concerts})
 
 def userlogin(request):
     if request.method=='POST':
@@ -73,7 +80,7 @@ def userlogin(request):
             password=form.cleaned_data['password']
             user=usermodel.objects.get(username=username)
             if check_password(password,user.password):
-                login(request,user) 
+                login(request,user)
                 if user.access=='admin':
                     return redirect('createconcert')
                 else:
