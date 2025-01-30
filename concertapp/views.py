@@ -72,6 +72,14 @@ def bookconcert(request):
     concerts=concertmodel.objects.all()
     return render(request,'ticket.html',{'concerts':concerts})
 
+def viewbookings(request):
+    access=request.user.access
+    if access=='admin':
+        users=ticketbooking.objects.all()
+        return render(request,'viewbookings.html',{'users':users})
+    else:
+        return HttpResponse('No access')
+
 def userlogin(request):
     if request.method=='POST':
         form=loginform(request.POST)

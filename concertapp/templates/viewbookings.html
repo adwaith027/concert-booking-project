@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Bookings</title>
+</head>
+<body>
+        {% if users %}
+        <table border="1" style="border-collapse: none;">
+        <tr>
+            <th>Booked User</th>
+            <th>Booked Concert</th>
+            <th>Booked Tickets</th>
+        </tr>
+        {% for user in users %}
+        <tr>
+            <td>{{user.username}}</td>
+            <td>{{user.concertname}}</td>
+            <td>{{user.bookedtickets}}</td>
+        </tr>
+        {% endfor %}
+        </table>
+        <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+        <p>No bookings have been made</p>
+        <a href="{% url 'logout' %}">Logout</a>
+        {% endif %}
+</body>
+</html>
