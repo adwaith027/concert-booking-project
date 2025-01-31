@@ -1,19 +1,9 @@
 from django.shortcuts import render,HttpResponse,redirect
 from django.contrib.auth.hashers import check_password
-from rest_framework.decorators import api_view, permission_classes
-from django.contrib.auth.decorators import login_required,user_passes_test
-from rest_framework.permissions import AllowAny,IsAuthenticated
-from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK,HTTP_400_BAD_REQUEST,HTTP_404_NOT_FOUND
-from rest_framework import status,permissions
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login,logout
-from rest_framework.authtoken.models import Token
-from rest_framework import status
-# from .serializers import ProductSerializer
-from django.shortcuts import get_object_or_404
 from .forms import userform,loginform,concertForm
 from .models import usermodel,concertmodel,ticketbooking
-from django.db.models import F 
 
 def signup(request):
     if request.method=='POST':
@@ -27,7 +17,6 @@ def signup(request):
             return render(request,'signup.html',{'form':form})
     form=userform()
     return render(request,'signup.html',{'form':form})
-
 
 @login_required(login_url='login')
 def createconcert(request):
@@ -72,6 +61,7 @@ def bookconcert(request):
     concerts=concertmodel.objects.all()
     return render(request,'ticket.html',{'concerts':concerts})
 
+@login_required(login_url='login')
 def viewbookings(request):
     access=request.user.access
     if access=='admin':
